@@ -4,12 +4,14 @@ RUN apt-get update
 
 RUN apt-get install maven openjdk-8-jdk -y
 
-COPY . /java-server
+WORKDIR /src
 
-WORKDIR /java-server
+COPY . .
 
 RUN mvn verify
 
-WORKDIR /java-server/target
+# WORKDIR /src/target => autre option target/words.jar  dans le CMD
 
-CMD java -Xmx8m -Xms8m -jar ./words.jar
+CMD exec java -Xmx8m -Xms8m -jar target/words.jar
+# Autre option:
+# CMD ["java", "-Xmx8m", "-Xms8m", "-jar", "target/words.jar"] => pas très lisible
